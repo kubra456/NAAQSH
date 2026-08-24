@@ -3,67 +3,59 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/public/index.php"
+      "destination": "/index.php"
     },
     {
       "source": "/about",
-      "destination": "/public/about.php"
+      "destination": "/about.php"
     },
     {
       "source": "/services",
-      "destination": "/public/services.php"
+      "destination": "/services.php"
     },
     {
       "source": "/contact",
-      "destination": "/public/contact.php"
+      "destination": "/contact.php"
     },
     {
       "source": "/portfolio",
-      "destination": "/public/portfolio.php"
+      "destination": "/portfolio.php"
     },
     {
       "source": "/plan_event",
-      "destination": "/public/plan_event.php"
+      "destination": "/plan_event.php"
     },
     {
-      "source": "/NAAQSH/public/(.*)",
-      "destination": "/public/$1"
+      "source": "/admin/(.*)",
+      "destination": "/../admin/$1"
+    },
+    {
+      "source": "/customer/(.*)",
+      "destination": "/../customer/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/../uploads/$1"
     },
     {
       "source": "/NAAQSH/admin/(.*)",
-      "destination": "/admin/$1"
+      "destination": "/../admin/$1"
     },
     {
       "source": "/NAAQSH/customer/(.*)",
-      "destination": "/customer/$1"
+      "destination": "/../customer/$1"
     },
     {
       "source": "/NAAQSH/uploads/(.*)",
-      "destination": "/uploads/$1"
+      "destination": "/../uploads/$1"
+    },
+    {
+      "source": "/NAAQSH/public/(.*)",
+      "destination": "/$1"
     },
     {
       "source": "/NAAQSH/(.*)",
       "destination": "/$1"
-    },
-    {
-      "source": "/admin/(.*)",
-      "destination": "/admin/$1"
-    },
-    {
-      "source": "/customer/(.*)",
-      "destination": "/customer/$1"
-    },
-    {
-      "source": "/uploads/(.*)",
-      "destination": "/uploads/$1"
-    },
-    {
-      "source": "/public/(.*)",
-      "destination": "/public/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
     }
   ]
 }
