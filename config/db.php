@@ -1,16 +1,14 @@
 <?php
 // Database configuration and connection helper for NAAQŚĦ.
-// The project is designed for a local XAMPP/MySQL setup using the default
-// root user with no password. This file centralizes all connection details.
+// Configured to connect to remote Aiven MySQL over SSL.
 
-const DB_HOST = '127.0.0.1';
-const DB_PORT = 3306;
-const DB_NAME = 'naaqsh';
-const DB_USER = 'root';
-const DB_PASS = '';
+const DB_HOST = 'mysql-1042b786-naaqsh.d.aivencloud.com';
+const DB_PORT = 13730;
+const DB_NAME = 'defaultdb';
+const DB_USER = 'avnadmin';
 
 /**
- * Create and reuse a PDO connection to the `naaqsh` database.
+ * Create and reuse a PDO connection to the Aiven MySQL database.
  *
  * PDO is used because it supports prepared statements, parameter binding,
  * and proper error handling. The returned object is cached in a static
@@ -26,21 +24,26 @@ function getPDO(): PDO
         return $pdo;
     }
 
+    $dbPass = (string)(getenv('NAAQSH_DB_PASS') ?: ($_ENV['NAAQSH_DB_PASS'] ?? ($_SERVER['NAAQSH_DB_PASS'] ?? '')));
+    $caPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'certs' . DIRECTORY_SEPARATOR . 'ca.pem';
+
     $dsn = 'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=utf8mb4';
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::MYSQL_ATTR_SSL_CA => $caPath,
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true,
     ];
 
     try {
         // A PDO instance is created once and stored for later use.
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        $pdo = new PDO($dsn, DB_USER, $dbPass, $options);
         return $pdo;
     } catch (PDOException $e) {
         // Do not reveal technical details to end users in production.
         // This message helps developers know the database is unavailable.
-        die('Database connection failed. Please make sure MySQL is running and the database exists. Details: ' . $e->getMessage());
+        die('Database connection failed. Details: ' . $e->getMessage());
     }
 }
 

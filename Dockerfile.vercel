@@ -1,0 +1,17 @@
+FROM dunglas/frankenphp:latest-php8.2
+
+# Install PDO MySQL extension required by NAAQSH database queries
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Set working directory
+WORKDIR /app
+
+# Copy all project files preserving full folder structure
+COPY . /app
+
+# Default port declaration (overridden at runtime by Vercel's $PORT)
+ENV PORT=80
+EXPOSE 80
+
+# Bind FrankenPHP web server to 0.0.0.0:$PORT
+CMD frankenphp php-server --listen :$PORT --root /app

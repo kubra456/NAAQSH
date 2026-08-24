@@ -1,0 +1,5 @@
+/sql/
+*.sql
+.git/
+.gitignore
+README.md

@@ -15,3 +15,5 @@ Thumbs.db
 *.log
 # Database backups
 sql/backup_*.sql
+# Local database backup
+config/db_backup.php
