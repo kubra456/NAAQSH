@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS event_inspirations (
 
 INSERT INTO admins (username, password_hash, full_name, role, status)
 VALUES
-    ('admin', '$2y$10$R1olaeoU5ImBKEoDA8pjKOh1a825M2ZVF548XlU52V.KrKg.gmLaa', 'NAAQ\u015a\u0126 Admin', 'super_admin', 'active')
+    ('admin', '$2y$10$2IbSuJ6PhmFFl6Md76Ohx.h2jgnOfhiftubS8GpCJYF2.p72qQgn.', 'NAAQ\u015a\u0126 Admin', 'super_admin', 'active')
 ON DUPLICATE KEY UPDATE
     password_hash = VALUES(password_hash),
     full_name = VALUES(full_name),
