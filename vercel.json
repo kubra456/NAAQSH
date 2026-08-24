@@ -27,27 +27,27 @@
     },
     {
       "source": "/admin/(.*)",
-      "destination": "/../admin/$1"
+      "destination": "/admin/$1"
     },
     {
       "source": "/customer/(.*)",
-      "destination": "/../customer/$1"
+      "destination": "/customer/$1"
     },
     {
       "source": "/uploads/(.*)",
-      "destination": "/../uploads/$1"
+      "destination": "/uploads/$1"
     },
     {
       "source": "/NAAQSH/admin/(.*)",
-      "destination": "/../admin/$1"
+      "destination": "/admin/$1"
     },
     {
       "source": "/NAAQSH/customer/(.*)",
-      "destination": "/../customer/$1"
+      "destination": "/customer/$1"
     },
     {
       "source": "/NAAQSH/uploads/(.*)",
-      "destination": "/../uploads/$1"
+      "destination": "/uploads/$1"
     },
     {
       "source": "/NAAQSH/public/(.*)",

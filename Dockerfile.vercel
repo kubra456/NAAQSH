@@ -9,9 +9,14 @@ WORKDIR /app
 # Copy all project files preserving full folder structure
 COPY . /app
 
+# Create symlinks inside /app/public for admin, customer, and uploads folders
+RUN ln -s /app/admin /app/public/admin && \
+    ln -s /app/customer /app/public/customer && \
+    ln -s /app/uploads /app/public/uploads
+
 # Default port declaration (overridden at runtime by Vercel's $PORT)
 ENV PORT=80
 EXPOSE 80
 
-# Bind FrankenPHP web server to 0.0.0.0:$PORT
-CMD frankenphp php-server --listen :$PORT --root /app
+# Bind FrankenPHP web server to 0.0.0.0:$PORT with root /app/public
+CMD frankenphp php-server --listen :$PORT --root /app/public
