@@ -178,6 +178,18 @@ function getAdminTeamImage($storedPath) {
             return '/NAAQSH/uploads/' . $storedPath;
         }
     }
+
+    $teamMap = [
+        'team/ayesha-noor.jpg' => 'team/team_20260820_144002_2180acb3efc5.jpg',
+        'team/bilal-hassan.jpg' => 'team/team_20260820_144118_d2990b4bb319.jpg',
+        'team/maryam-zafar.jpg' => 'team/team_20260820_144318_3668491765ca.jpg',
+        'team/hassan-raza.jpg' => 'team/team_20260820_144336_41949ed2eae1.jpg',
+    ];
+
+    if (isset($teamMap[$storedPath]) && file_exists(__DIR__ . '/../uploads/' . $teamMap[$storedPath])) {
+        return '/NAAQSH/uploads/' . $teamMap[$storedPath];
+    }
+
     return 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
 }
 ?>

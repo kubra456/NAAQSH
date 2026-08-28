@@ -16,15 +16,6 @@ $services = $stmt->fetchAll();
 
 function naaqshServiceImage($storedPath, $idx)
 {
-    $fallbacks = [
-        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80'
-    ];
-
     if (!empty($storedPath)) {
         $fullPath = __DIR__ . '/../uploads/services/' . $storedPath;
         if (file_exists($fullPath)) {
@@ -35,6 +26,28 @@ function naaqshServiceImage($storedPath, $idx)
             return '/NAAQSH/uploads/' . $storedPath;
         }
     }
+
+    $realServiceImages = [
+        'fd20510ef10326f0.jpg',
+        '2714f2fcda36009e.jpg',
+        'a37723617530216d.jpg',
+        '7b46ad2f0994a391.jpg',
+        'f4b6aab08073c8dc.jpg',
+        'e0b629a75dbfec41.jpg'
+    ];
+    $realFilename = $realServiceImages[$idx % count($realServiceImages)];
+    if (file_exists(__DIR__ . '/../uploads/services/' . $realFilename)) {
+        return '/NAAQSH/uploads/services/' . $realFilename;
+    }
+
+    $fallbacks = [
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80'
+    ];
 
     return $fallbacks[$idx % count($fallbacks)];
 }

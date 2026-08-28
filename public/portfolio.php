@@ -9,6 +9,25 @@ $items = $stmt->fetchAll();
 
 function naaqshGalleryImage($storedPath, $idx)
 {
+    if (!empty($storedPath)) {
+        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
+        if (file_exists($fullPath)) {
+            return '/NAAQSH/uploads/' . $storedPath;
+        }
+    }
+
+    $realGalleryImages = [
+        'gallery/7d7b51288c8cff36.png',
+        'gallery/fbbf5e61a7c0725d.png',
+        'gallery/ec41d303817e08a3.png',
+        'gallery/26c1c903c1f4c734.png',
+        'gallery/c3aa0876ea54bd6c.png'
+    ];
+    $realPath = $realGalleryImages[$idx % count($realGalleryImages)];
+    if (file_exists(__DIR__ . '/../uploads/' . $realPath)) {
+        return '/NAAQSH/uploads/' . $realPath;
+    }
+
     $fallbacks = [
         'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
         'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1200&q=80',
@@ -17,12 +36,6 @@ function naaqshGalleryImage($storedPath, $idx)
         'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=1200&q=80'
     ];
 
-    if (!empty($storedPath)) {
-        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
-        if (file_exists($fullPath)) {
-            return '/NAAQSH/uploads/' . $storedPath;
-        }
-    }
     return $fallbacks[$idx % count($fallbacks)];
 }
 ?>

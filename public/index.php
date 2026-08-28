@@ -112,6 +112,30 @@ function naaqshImageUrl($storedPath, $fallbackUrl)
             return $basePath . '/uploads/gallery/' . $storedPath;
         }
     }
+
+    $realServiceMap = [
+        'wedding-planning.jpg' => 'services/fd20510ef10326f0.jpg',
+        'nikah-reception.jpg' => 'services/2714f2fcda36009e.jpg',
+        'luxury-styling.jpg' => 'services/a37723617530216d.jpg',
+        'stage-design.jpg' => 'services/7b46ad2f0994a391.jpg',
+        'wedding-photography.jpg' => 'services/f4b6aab08073c8dc.jpg',
+        'corporate-event.jpg' => 'services/e0b629a75dbfec41.jpg',
+    ];
+    $realGalleryMap = [
+        'gallery/wedding-setup.jpg' => 'gallery/7d7b51288c8cff36.png',
+        'gallery/portrait-session.jpg' => 'gallery/fbbf5e61a7c0725d.png',
+        'gallery/corporate-stage.jpg' => 'gallery/ec41d303817e08a3.png',
+        'gallery/reception-styling.jpg' => 'gallery/26c1c903c1f4c734.png',
+    ];
+
+    if (isset($realServiceMap[$storedPath]) && file_exists(__DIR__ . '/../uploads/' . $realServiceMap[$storedPath])) {
+        return $basePath . '/uploads/' . $realServiceMap[$storedPath];
+    }
+
+    if (isset($realGalleryMap[$storedPath]) && file_exists(__DIR__ . '/../uploads/' . $realGalleryMap[$storedPath])) {
+        return $basePath . '/uploads/' . $realGalleryMap[$storedPath];
+    }
+
     return $fallbackUrl;
 }
 ?>

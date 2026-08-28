@@ -12,6 +12,25 @@ $teamMembers = $teamStmt->fetchAll();
 // Team portrait fallback helper
 function naaqshTeamImage($storedPath, $defaultIdx)
 {
+    if (!empty($storedPath)) {
+        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
+        if (file_exists($fullPath)) {
+            return '/NAAQSH/uploads/' . $storedPath;
+        }
+    }
+
+    $realTeamImages = [
+        'team/team_20260820_144002_2180acb3efc5.jpg',
+        'team/team_20260820_144118_d2990b4bb319.jpg',
+        'team/team_20260820_144318_3668491765ca.jpg',
+        'team/team_20260820_144336_41949ed2eae1.jpg',
+    ];
+    $idx = $defaultIdx % count($realTeamImages);
+    $realPath = $realTeamImages[$idx];
+    if (file_exists(__DIR__ . '/../uploads/' . $realPath)) {
+        return '/NAAQSH/uploads/' . $realPath;
+    }
+
     $fallbacks = [
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
@@ -19,12 +38,6 @@ function naaqshTeamImage($storedPath, $defaultIdx)
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80'
     ];
 
-    if (!empty($storedPath)) {
-        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
-        if (file_exists($fullPath)) {
-            return '/NAAQSH/uploads/' . $storedPath;
-        }
-    }
     return $fallbacks[$defaultIdx % count($fallbacks)];
 }
 ?>
