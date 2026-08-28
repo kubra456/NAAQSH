@@ -1,5 +1,5 @@
-﻿<?php
-// Luxury Contact & Inquiry Form for NAAQŚĦ.
+<?php
+require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/header.php';
 require_once __DIR__ . '/../config/db.php';
 
@@ -7,7 +7,7 @@ $errors = [];
 $success = '';
 $prefillSubject = trim($_GET['service'] ?? '');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $phone = trim($_POST['phone'] ?? '');

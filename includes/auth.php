@@ -2,9 +2,7 @@
 // Shared authentication helpers for admin pages.
 // The session is started once here so all protected admin screens use the same
 // authenticated state without duplicating logic across files.
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/session.php';
 
 require_once __DIR__ . '/../config/db.php';
 
@@ -45,7 +43,12 @@ function adminLogin($username, $password)
 
     // Rotate the session identifier after successful authentication to reduce
     // fixation attacks and keep the admin session fresh.
-    session_regenerate_id(true);
+    require_once __DIR__ . '/session.php';
+
+    if (!headers_sent()) {
+        session_regenerate_id(true);
+    }
+
     $_SESSION['admin_id'] = (int)$admin['id'];
     $_SESSION['admin_name'] = $admin['full_name'];
     $_SESSION['admin_username'] = $admin['username'];
@@ -70,9 +73,7 @@ function requireAdmin()
  */
 function adminLogout()
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    require_once __DIR__ . '/session.php';
 
     $_SESSION = [];
 

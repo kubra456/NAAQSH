@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Admin: Manage Customer Events (view, edit, status changes, delete)
 require_once __DIR__ . '/../includes/auth.php';
 requireAdmin();

@@ -1,7 +1,7 @@
 <?php
 // Luxury Inspiration Board Display for NAAQŚĦ Client Portal
+require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
-session_start();
 
 if (empty($_SESSION['customer_id'])) {
     header('Location: /NAAQSH/customer/login.php');

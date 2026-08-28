@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Admin: Create a new service package
 require_once __DIR__ . '/../includes/auth.php';
 requireAdmin();

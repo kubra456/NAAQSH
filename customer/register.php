@@ -1,7 +1,7 @@
-﻿<?php
+<?php
 // Luxury Customer Registration Screen for NAAQŚĦ.
+require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
-session_start();
 
 if (!empty($_SESSION['customer_id'])) {
     header('Location: /NAAQSH/customer/dashboard.php');

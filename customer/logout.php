@@ -1,9 +1,7 @@
-﻿<?php
+<?php
 // Customer logout endpoint.
 // This safely clears the customer session and invalidates the session cookie.
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/../includes/session.php';
 
 $_SESSION = [];
 

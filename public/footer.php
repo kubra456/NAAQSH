@@ -1,4 +1,4 @@
-﻿  </main>
+  </main>
 
   <footer class="site-footer">
     <div class="footer-top">

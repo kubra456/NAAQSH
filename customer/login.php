@@ -1,7 +1,7 @@
-﻿<?php
+<?php
 // Luxury Customer Login Screen for NAAQŚĦ.
+require_once __DIR__ . '/../includes/session.php';
 require_once __DIR__ . '/../config/db.php';
-session_start();
 
 if (!empty($_SESSION['customer_id'])) {
     header('Location: /NAAQSH/customer/dashboard.php');
@@ -9,7 +9,7 @@ if (!empty($_SESSION['customer_id'])) {
 }
 
 $error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please enter both your email and password.';
     } else {
         $pdo = getPDO();
-        $stmt = $pdo->prepare('SELECT id, full_name, password_hash, status FROM users WHERE email = ? LIMIT 1');
+        $stmt = $pdo->prepare('SELECT id, full_name, password_hash, status FROM users WHERE LOWER(TRIM(email)) = LOWER(?) LIMIT 1');
         $stmt->execute([$email]);
         $user = $stmt->fetch();
 
@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user['status'] === 'banned') {
                 $error = 'Your account has been deactivated. Please contact studio support.';
             } else {
+                if (!headers_sent()) {
+                    session_regenerate_id(true);
+                }
                 $_SESSION['customer_id'] = (int)$user['id'];
                 $_SESSION['customer_name'] = $user['full_name'];
                 header('Location: /NAAQSH/customer/dashboard.php');
