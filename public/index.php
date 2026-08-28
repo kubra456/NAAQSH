@@ -175,8 +175,15 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
     </div>
 
     <div class="services-grid">
-      <?php foreach ($featuredServices as $service): 
-          $imgUrl = naaqshImageUrl($service['image'] ?? '');
+      <?php 
+      $serviceImagesMap = [
+          1 => 'services/2714f2fcda36009e.jpg',
+          2 => 'services/a37723617530216d.jpg',
+          3 => 'services/7b46ad2f0994a391.jpg'
+      ];
+      foreach ($featuredServices as $service): 
+          $imgPath = $serviceImagesMap[$service['id']] ?? $service['image'];
+          $imgUrl = naaqshImageUrl($imgPath, '');
       ?>
         <article class="service-card">
           <div class="service-card-media">
@@ -214,11 +221,42 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
 
     <div class="portfolio-grid">
       <?php 
-      foreach ($galleryItems as $idx => $galleryItem): 
-          $imgUrl = naaqshImageUrl($galleryItem['image_path'] ?? '');
-          $spanClass = ($idx === 0) ? 'span-12' : 'span-6';
+      $curatedPortfolioItems = [
+          [
+              'title' => 'Signature Wedding Setup',
+              'caption' => 'A luxury wedding venue styled with floral installations and warm ambient lighting.',
+              'image_path' => 'gallery/7d7b51288c8cff36.png',
+              'span' => 'span-12'
+          ],
+          [
+              'title' => 'Bride and Groom Portraits',
+              'caption' => 'Editorial portraits captured in natural light for a premium wedding story.',
+              'image_path' => 'gallery/fbbf5e61a7c0725d.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'Corporate Launch Stage',
+              'caption' => 'Modern event design for a product launch and networking reception.',
+              'image_path' => 'gallery/ec41d303817e08a3.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'An Evening of Timeless Celebration',
+              'caption' => 'Intimate candlelit reception dining, warm ambient lighting, and bespoke floral architecture.',
+              'image_path' => 'gallery/26c1c903c1f4c734.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'Royal Walima Stage',
+              'caption' => 'Custom floral stage designed for grand luxury reception.',
+              'image_path' => 'gallery/c3aa0876ea54bd6c.png',
+              'span' => 'span-6'
+          ]
+      ];
+      foreach ($curatedPortfolioItems as $galleryItem): 
+          $imgUrl = naaqshImageUrl($galleryItem['image_path'], '');
       ?>
-        <article class="portfolio-card <?php echo $spanClass; ?>">
+        <article class="portfolio-card <?php echo $galleryItem['span']; ?>">
           <img
             src="<?php echo htmlspecialchars($imgUrl); ?>"
             alt="<?php echo htmlspecialchars($galleryItem['title']); ?>"
@@ -226,7 +264,7 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
           >
           <div class="portfolio-card-overlay">
             <h3 class="portfolio-card-title"><?php echo htmlspecialchars($galleryItem['title']); ?></h3>
-            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption'] ?? ''); ?></p>
+            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption']); ?></p>
             <span class="portfolio-card-action">VIEW STORY <span class="arrow">&rarr;</span></span>
           </div>
         </article>

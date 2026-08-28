@@ -221,12 +221,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
               <div style="display: flex; align-items: center; gap: 1.5rem; padding: 1rem; background: var(--color-bg-alt); border: 1px solid var(--color-border); margin-bottom: 0.75rem;">
                 <?php if (!empty($service['image'])): ?>
                   <img 
-                    src="<?php 
-                      $filename = ltrim(str_replace('services/', '', $service['image']), '/');
-                      echo htmlspecialchars(file_exists(__DIR__ . '/../uploads/services/' . $filename) ? '/NAAQSH/uploads/services/' . $filename : '/NAAQSH/uploads/' . $service['image']); 
-                    ?>" 
+                    src="/NAAQSH/uploads/services/<?php echo htmlspecialchars($service['image']); ?>" 
                     alt="Current cover image" 
                     style="width: 100px; height: 75px; object-fit: cover; border: 1px solid var(--color-border);"
+                    onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80';"
                   >
                   <div>
                     <strong><?php echo htmlspecialchars($service['image']); ?></strong>

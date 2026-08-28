@@ -7,18 +7,36 @@ $pdo = getPDO();
 $stmt = $pdo->query('SELECT id, title, image_path, caption, is_featured FROM gallery ORDER BY created_at DESC');
 $items = $stmt->fetchAll();
 
-function naaqshGalleryImage($storedPath)
+function naaqshGalleryImage($storedPath, $idx)
 {
     if (!empty($storedPath)) {
-        if (file_exists(__DIR__ . '/../uploads/' . $storedPath)) {
+        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
+        if (file_exists($fullPath)) {
             return '/NAAQSH/uploads/' . $storedPath;
         }
-        $filename = ltrim(str_replace('gallery/', '', $storedPath), '/');
-        if (file_exists(__DIR__ . '/../uploads/gallery/' . $filename)) {
-            return '/NAAQSH/uploads/gallery/' . $filename;
-        }
     }
-    return '';
+
+    $realGalleryImages = [
+        'gallery/7d7b51288c8cff36.png',
+        'gallery/fbbf5e61a7c0725d.png',
+        'gallery/ec41d303817e08a3.png',
+        'gallery/26c1c903c1f4c734.png',
+        'gallery/c3aa0876ea54bd6c.png'
+    ];
+    $realPath = $realGalleryImages[$idx % count($realGalleryImages)];
+    if (file_exists(__DIR__ . '/../uploads/' . $realPath)) {
+        return '/NAAQSH/uploads/' . $realPath;
+    }
+
+    $fallbacks = [
+        'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=80',
+        'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=1200&q=80'
+    ];
+
+    return $fallbacks[$idx % count($fallbacks)];
 }
 ?>
 
@@ -54,7 +72,7 @@ function naaqshGalleryImage($storedPath)
           ?>
           <article class="portfolio-card <?php echo $spanClass; ?>">
             <img
-              src="<?php echo htmlspecialchars(naaqshGalleryImage($it['image_path'] ?? '')); ?>"
+              src="<?php echo htmlspecialchars(naaqshGalleryImage($it['image_path'], $idx)); ?>"
               alt="<?php echo htmlspecialchars($it['title']); ?>"
               loading="lazy"
             >
