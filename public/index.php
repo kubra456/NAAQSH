@@ -95,47 +95,20 @@ $testimonials = [
 /**
  * Image resolver with luxury fallback and multi-directory resolution
  */
-function naaqshImageUrl($storedPath, $fallbackUrl)
+function naaqshImageUrl($storedPath, $fallbackUrl = '')
 {
     $basePath = '/NAAQSH';
     if (!empty($storedPath)) {
-        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
-        if (file_exists($fullPath)) {
+        if (file_exists(__DIR__ . '/../uploads/' . $storedPath)) {
             return $basePath . '/uploads/' . $storedPath;
         }
-        $servicePath = __DIR__ . '/../uploads/services/' . $storedPath;
-        if (file_exists($servicePath)) {
+        if (file_exists(__DIR__ . '/../uploads/services/' . $storedPath)) {
             return $basePath . '/uploads/services/' . $storedPath;
         }
-        $galleryPath = __DIR__ . '/../uploads/gallery/' . $storedPath;
-        if (file_exists($galleryPath)) {
+        if (file_exists(__DIR__ . '/../uploads/gallery/' . $storedPath)) {
             return $basePath . '/uploads/gallery/' . $storedPath;
         }
     }
-
-    $realServiceMap = [
-        'wedding-planning.jpg' => 'services/fd20510ef10326f0.jpg',
-        'nikah-reception.jpg' => 'services/2714f2fcda36009e.jpg',
-        'luxury-styling.jpg' => 'services/a37723617530216d.jpg',
-        'stage-design.jpg' => 'services/7b46ad2f0994a391.jpg',
-        'wedding-photography.jpg' => 'services/f4b6aab08073c8dc.jpg',
-        'corporate-event.jpg' => 'services/e0b629a75dbfec41.jpg',
-    ];
-    $realGalleryMap = [
-        'gallery/wedding-setup.jpg' => 'gallery/7d7b51288c8cff36.png',
-        'gallery/portrait-session.jpg' => 'gallery/fbbf5e61a7c0725d.png',
-        'gallery/corporate-stage.jpg' => 'gallery/ec41d303817e08a3.png',
-        'gallery/reception-styling.jpg' => 'gallery/26c1c903c1f4c734.png',
-    ];
-
-    if (isset($realServiceMap[$storedPath]) && file_exists(__DIR__ . '/../uploads/' . $realServiceMap[$storedPath])) {
-        return $basePath . '/uploads/' . $realServiceMap[$storedPath];
-    }
-
-    if (isset($realGalleryMap[$storedPath]) && file_exists(__DIR__ . '/../uploads/' . $realGalleryMap[$storedPath])) {
-        return $basePath . '/uploads/' . $realGalleryMap[$storedPath];
-    }
-
     return $fallbackUrl;
 }
 ?>
@@ -203,18 +176,19 @@ function naaqshImageUrl($storedPath, $fallbackUrl)
 
     <div class="services-grid">
       <?php 
-      $serviceFallbacks = [
-          1 => 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80',
-          2 => 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80',
-          3 => 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80'
+      $serviceImagesMap = [
+          1 => 'services/2714f2fcda36009e.jpg',
+          2 => 'services/a37723617530216d.jpg',
+          3 => 'services/7b46ad2f0994a391.jpg'
       ];
       foreach ($featuredServices as $service): 
-          $sFallback = $serviceFallbacks[$service['id']] ?? 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80';
+          $imgPath = $serviceImagesMap[$service['id']] ?? $service['image'];
+          $imgUrl = naaqshImageUrl($imgPath, '');
       ?>
         <article class="service-card">
           <div class="service-card-media">
             <img
-              src="<?php echo htmlspecialchars(naaqshImageUrl($service['image'], $sFallback)); ?>"
+              src="<?php echo htmlspecialchars($imgUrl); ?>"
               alt="<?php echo htmlspecialchars($service['title']); ?>"
               loading="lazy"
             >
@@ -247,26 +221,51 @@ function naaqshImageUrl($storedPath, $fallbackUrl)
 
     <div class="portfolio-grid">
       <?php 
-      $galleryFallbacks = [
-          1 => 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80',
-          2 => 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1200&q=80',
-          5 => 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=80',
-          3 => 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80',
-          4 => 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=1200&q=80'
+      $curatedPortfolioItems = [
+          [
+              'title' => 'Signature Wedding Setup',
+              'caption' => 'A luxury wedding venue styled with floral installations and warm ambient lighting.',
+              'image_path' => 'gallery/7d7b51288c8cff36.png',
+              'span' => 'span-12'
+          ],
+          [
+              'title' => 'Bride and Groom Portraits',
+              'caption' => 'Editorial portraits captured in natural light for a premium wedding story.',
+              'image_path' => 'gallery/fbbf5e61a7c0725d.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'Corporate Launch Stage',
+              'caption' => 'Modern event design for a product launch and networking reception.',
+              'image_path' => 'gallery/ec41d303817e08a3.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'An Evening of Timeless Celebration',
+              'caption' => 'Intimate candlelit reception dining, warm ambient lighting, and bespoke floral architecture.',
+              'image_path' => 'gallery/26c1c903c1f4c734.png',
+              'span' => 'span-6'
+          ],
+          [
+              'title' => 'Royal Walima Stage',
+              'caption' => 'Custom floral stage designed for grand luxury reception.',
+              'image_path' => 'gallery/c3aa0876ea54bd6c.png',
+              'span' => 'span-6'
+          ]
       ];
-      foreach ($galleryItems as $idx => $galleryItem): 
-          $gFallback = $galleryFallbacks[$galleryItem['id']] ?? 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=1200&q=80';
+      foreach ($curatedPortfolioItems as $galleryItem): 
+          $imgUrl = naaqshImageUrl($galleryItem['image_path'], '');
       ?>
-        <article class="portfolio-card <?php echo $idx === 0 ? 'span-12' : 'span-6'; ?>">
+        <article class="portfolio-card <?php echo $galleryItem['span']; ?>">
           <img
-            src="<?php echo htmlspecialchars(naaqshImageUrl($galleryItem['image_path'], $gFallback)); ?>"
+            src="<?php echo htmlspecialchars($imgUrl); ?>"
             alt="<?php echo htmlspecialchars($galleryItem['title']); ?>"
             loading="lazy"
           >
           <div class="portfolio-card-overlay">
             <h3 class="portfolio-card-title"><?php echo htmlspecialchars($galleryItem['title']); ?></h3>
-            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption'] ?? 'Editorial styling and documentary photography.'); ?></p>
-            <span class="portfolio-card-action">View Story <span class="arrow">&rarr;</span></span>
+            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption']); ?></p>
+            <span class="portfolio-card-action">VIEW STORY <span class="arrow">&rarr;</span></span>
           </div>
         </article>
       <?php endforeach; ?>
