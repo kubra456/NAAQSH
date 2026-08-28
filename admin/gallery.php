@@ -189,12 +189,15 @@ unset($_SESSION['flash_success']);
 // Helper for image preview URL
 function getGalleryAdminImage($storedPath) {
     if (!empty($storedPath)) {
-        $fullPath = __DIR__ . '/../uploads/' . $storedPath;
-        if (file_exists($fullPath)) {
+        if (file_exists(__DIR__ . '/../uploads/' . $storedPath)) {
             return '/NAAQSH/uploads/' . $storedPath;
         }
+        $filename = ltrim(str_replace('gallery/', '', $storedPath), '/');
+        if (file_exists(__DIR__ . '/../uploads/gallery/' . $filename)) {
+            return '/NAAQSH/uploads/gallery/' . $filename;
+        }
     }
-    return 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80';
+    return '';
 }
 ?>
 <!doctype html>
@@ -345,7 +348,7 @@ function getGalleryAdminImage($storedPath) {
                     <td><?php echo (int)$it['id']; ?></td>
                     <td style="width: 90px;">
                       <?php if (!empty($it['image_path'])): ?>
-                        <img src="<?php echo htmlspecialchars(getGalleryAdminImage($it['image_path'])); ?>" alt="" style="width: 75px; height: 50px; object-fit: cover; border: 1px solid var(--color-border);" onerror="this.src='https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=200&q=80';">
+                        <img src="<?php echo htmlspecialchars(getGalleryAdminImage($it['image_path'])); ?>" alt="" style="width: 75px; height: 50px; object-fit: cover; border: 1px solid var(--color-border);">
                       <?php else: ?>
                         <span style="color: var(--color-muted); font-size: 0.75rem;">No image</span>
                       <?php endif; ?>

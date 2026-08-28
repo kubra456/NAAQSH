@@ -175,32 +175,8 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
     </div>
 
     <div class="services-grid">
-      <?php 
-      $homepageServices = [
-          [
-              'category_name' => 'WEDDING PLANNING',
-              'title' => 'Wedding Planning Package',
-              'description' => 'End-to-end planning, guest coordination, timeline management, and vendor support.',
-              'price' => 95000.00,
-              'image' => 'services/2714f2fcda36009e.jpg'
-          ],
-          [
-              'category_name' => 'WEDDING PLANNING',
-              'title' => 'Nikah & Reception Coordination',
-              'description' => 'Coordination for the ceremony, guest flow, and reception setup with a dedicated planner.',
-              'price' => 75000.00,
-              'image' => 'services/a37723617530216d.jpg'
-          ],
-          [
-              'category_name' => 'EVENT STYLING',
-              'title' => 'Luxury Event Styling',
-              'description' => 'Signature floral arrangements, candle lighting, and a complete event visual theme.',
-              'price' => 68000.00,
-              'image' => 'services/7b46ad2f0994a391.jpg'
-          ]
-      ];
-      foreach ($homepageServices as $service): 
-          $imgUrl = naaqshImageUrl($service['image'], '');
+      <?php foreach ($featuredServices as $service): 
+          $imgUrl = naaqshImageUrl($service['image'] ?? '');
       ?>
         <article class="service-card">
           <div class="service-card-media">
@@ -238,42 +214,11 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
 
     <div class="portfolio-grid">
       <?php 
-      $homepagePortfolio = [
-          [
-              'title' => 'Signature Wedding Setup',
-              'caption' => 'A luxury wedding venue styled with floral installations and warm ambient lighting.',
-              'image' => 'gallery/7d7b51288c8cff36.png',
-              'span' => 'span-12'
-          ],
-          [
-              'title' => 'Bride and Groom Portraits',
-              'caption' => 'Editorial portraits captured in natural light for a premium wedding story.',
-              'image' => 'gallery/fbbf5e61a7c0725d.png',
-              'span' => 'span-6'
-          ],
-          [
-              'title' => 'Corporate Launch Stage',
-              'caption' => 'Modern event design for a product launch and networking reception.',
-              'image' => 'gallery/c3aa0876ea54bd6c.png',
-              'span' => 'span-6'
-          ],
-          [
-              'title' => 'An Evening of Timeless Celebration',
-              'caption' => 'Intimate candlelit reception dining, warm ambient lighting, and bespoke floral architecture.',
-              'image' => 'gallery/reception-styling.jpg',
-              'span' => 'span-6'
-          ],
-          [
-              'title' => 'Royal Walima Stage',
-              'caption' => 'Custom floral stage designed for grand luxury reception.',
-              'image' => 'gallery/royal-walima-stage.jpg',
-              'span' => 'span-6'
-          ]
-      ];
-      foreach ($homepagePortfolio as $galleryItem): 
-          $imgUrl = naaqshImageUrl($galleryItem['image'], '');
+      foreach ($galleryItems as $idx => $galleryItem): 
+          $imgUrl = naaqshImageUrl($galleryItem['image_path'] ?? '');
+          $spanClass = ($idx === 0) ? 'span-12' : 'span-6';
       ?>
-        <article class="portfolio-card <?php echo $galleryItem['span']; ?>">
+        <article class="portfolio-card <?php echo $spanClass; ?>">
           <img
             src="<?php echo htmlspecialchars($imgUrl); ?>"
             alt="<?php echo htmlspecialchars($galleryItem['title']); ?>"
@@ -281,7 +226,7 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
           >
           <div class="portfolio-card-overlay">
             <h3 class="portfolio-card-title"><?php echo htmlspecialchars($galleryItem['title']); ?></h3>
-            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption']); ?></p>
+            <p class="portfolio-card-caption"><?php echo htmlspecialchars($galleryItem['caption'] ?? ''); ?></p>
             <span class="portfolio-card-action">VIEW STORY <span class="arrow">&rarr;</span></span>
           </div>
         </article>

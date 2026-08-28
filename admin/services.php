@@ -29,6 +29,19 @@ $stmt = $pdo->query('
     ORDER BY s.created_at DESC
 ');
 $items = $stmt->fetchAll();
+// Helper for service thumbnail preview
+function getServiceAdminImage($storedPath) {
+    if (!empty($storedPath)) {
+        $filename = ltrim(str_replace('services/', '', $storedPath), '/');
+        if (file_exists(__DIR__ . '/../uploads/services/' . $filename)) {
+            return '/NAAQSH/uploads/services/' . $filename;
+        }
+        if (file_exists(__DIR__ . '/../uploads/' . $storedPath)) {
+            return '/NAAQSH/uploads/' . $storedPath;
+        }
+    }
+    return '';
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -105,7 +118,7 @@ $items = $stmt->fetchAll();
                   <td><?php echo (int)$it['id']; ?></td>
                   <td style="width: 80px;">
                     <?php if (!empty($it['image'])): ?>
-                      <img src="/NAAQSH/uploads/services/<?php echo htmlspecialchars($it['image']); ?>" alt="" style="width: 60px; height: 45px; object-fit: cover; border: 1px solid var(--color-border);" onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=200&q=80';">
+                      <img src="<?php echo htmlspecialchars(getServiceAdminImage($it['image'])); ?>" alt="" style="width: 60px; height: 45px; object-fit: cover; border: 1px solid var(--color-border);">
                     <?php else: ?>
                       <div style="width: 60px; height: 45px; background: var(--color-bg-alt); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--color-muted);">No Img</div>
                     <?php endif; ?>
