@@ -8,7 +8,7 @@ $pdo = getPDO();
 $categories = $pdo->query('SELECT id, name FROM categories WHERE is_active = 1 ORDER BY name ASC')->fetchAll();
 
 $errors = [];
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $categoryId = (int)($_POST['category_id'] ?? 0);
     $title = trim($_POST['title'] ?? '');
     $description = trim($_POST['description'] ?? '');
@@ -40,6 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $title), '-')) ?: 'service';
+        $stmtSlug = $pdo->prepare('SELECT COUNT(*) FROM services WHERE slug = ?');
+        $stmtSlug->execute([$slug]);
+        if ((int)$stmtSlug->fetchColumn() > 0) {
+            $slug .= '-' . time();
+        }
+
         $stmt = $pdo->prepare('INSERT INTO services (category_id, title, slug, description, price, image, is_active) VALUES (?, ?, ?, ?, ?, ?, 1)');
         $stmt->execute([$categoryId, $title, $slug, $description, $price, $filename]);
         header('Location: /NAAQSH/admin/services.php');
@@ -75,6 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="/NAAQSH/admin/events.php" class="nav-link">Events</a>
         <a href="/NAAQSH/admin/services.php" class="nav-link active">Services</a>
         <a href="/NAAQSH/admin/gallery.php" class="nav-link">Gallery</a>
+        <a href="/NAAQSH/admin/team.php" class="nav-link">Team</a>
+        <a href="/NAAQSH/admin/bookings.php" class="nav-link">Bookings</a>
+        <a href="/NAAQSH/admin/inquiries.php" class="nav-link">Inquiries</a>
         <a href="/NAAQSH/public/index.php" class="nav-link" target="_blank">View Site &nearr;</a>
         
         <div class="nav-actions">

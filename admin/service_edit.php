@@ -150,6 +150,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         <a href="/NAAQSH/admin/events.php" class="nav-link">Events</a>
         <a href="/NAAQSH/admin/services.php" class="nav-link active">Services</a>
         <a href="/NAAQSH/admin/gallery.php" class="nav-link">Gallery</a>
+        <a href="/NAAQSH/admin/team.php" class="nav-link">Team</a>
+        <a href="/NAAQSH/admin/bookings.php" class="nav-link">Bookings</a>
+        <a href="/NAAQSH/admin/inquiries.php" class="nav-link">Inquiries</a>
         <a href="/NAAQSH/public/index.php" class="nav-link" target="_blank">View Site &nearr;</a>
         
         <div class="nav-actions">

@@ -99,6 +99,10 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
 {
     $basePath = '/NAAQSH';
     if (!empty($storedPath)) {
+        $cleanPath = ltrim(str_replace('services/', '', $storedPath), '/');
+        if (file_exists(__DIR__ . '/../uploads/services/' . $cleanPath)) {
+            return $basePath . '/uploads/services/' . $cleanPath;
+        }
         if (file_exists(__DIR__ . '/../uploads/' . $storedPath)) {
             return $basePath . '/uploads/' . $storedPath;
         }
@@ -109,7 +113,7 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
             return $basePath . '/uploads/gallery/' . $storedPath;
         }
     }
-    return $fallbackUrl;
+    return $fallbackUrl ?: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80';
 }
 ?>
 
@@ -176,14 +180,8 @@ function naaqshImageUrl($storedPath, $fallbackUrl = '')
 
     <div class="services-grid">
       <?php 
-      $serviceImagesMap = [
-          1 => 'services/2714f2fcda36009e.jpg',
-          2 => 'services/a37723617530216d.jpg',
-          3 => 'services/7b46ad2f0994a391.jpg'
-      ];
       foreach ($featuredServices as $service): 
-          $imgPath = $serviceImagesMap[$service['id']] ?? $service['image'];
-          $imgUrl = naaqshImageUrl($imgPath, '');
+          $imgUrl = naaqshImageUrl($service['image'] ?? '', '');
       ?>
         <article class="service-card">
           <div class="service-card-media">

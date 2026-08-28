@@ -6,20 +6,26 @@ require_once __DIR__ . '/../config/db.php';
 
 $pdo = getPDO();
 
+$deleteError = null;
+
 // Handle deletion
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
-    $stmt = $pdo->prepare('SELECT image FROM services WHERE id = ?');
-    $stmt->execute([$id]);
-    $row = $stmt->fetch();
-    if ($row && $row['image']) {
-        @unlink(__DIR__ . '/../uploads/services/' . $row['image']);
-        @unlink(__DIR__ . '/../uploads/' . $row['image']);
+    try {
+        $stmt = $pdo->prepare('SELECT image FROM services WHERE id = ?');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if ($row && $row['image']) {
+            @unlink(__DIR__ . '/../uploads/services/' . $row['image']);
+            @unlink(__DIR__ . '/../uploads/' . $row['image']);
+        }
+        $del = $pdo->prepare('DELETE FROM services WHERE id = ?');
+        $del->execute([$id]);
+        header('Location: /NAAQSH/admin/services.php?deleted=1');
+        exit;
+    } catch (PDOException $e) {
+        $deleteError = 'Cannot delete service package because it is currently referenced by customer bookings.';
     }
-    $del = $pdo->prepare('DELETE FROM services WHERE id = ?');
-    $del->execute([$id]);
-    header('Location: /NAAQSH/admin/services.php');
-    exit;
 }
 
 $stmt = $pdo->query('
@@ -58,6 +64,9 @@ $items = $stmt->fetchAll();
         <a href="/NAAQSH/admin/events.php" class="nav-link">Events</a>
         <a href="/NAAQSH/admin/services.php" class="nav-link active">Services</a>
         <a href="/NAAQSH/admin/gallery.php" class="nav-link">Gallery</a>
+        <a href="/NAAQSH/admin/team.php" class="nav-link">Team</a>
+        <a href="/NAAQSH/admin/bookings.php" class="nav-link">Bookings</a>
+        <a href="/NAAQSH/admin/inquiries.php" class="nav-link">Inquiries</a>
         <a href="/NAAQSH/public/index.php" class="nav-link" target="_blank">View Site &nearr;</a>
         
         <div class="nav-actions">
@@ -80,6 +89,18 @@ $items = $stmt->fetchAll();
       <?php if (isset($_GET['updated'])): ?>
         <div class="alert alert-success" style="margin-bottom: 1.5rem;">
           Service package #<?php echo (int)$_GET['updated']; ?> was updated successfully.
+        </div>
+      <?php endif; ?>
+
+      <?php if (isset($_GET['deleted'])): ?>
+        <div class="alert alert-success" style="margin-bottom: 1.5rem;">
+          Service package was deleted successfully.
+        </div>
+      <?php endif; ?>
+
+      <?php if (!empty($deleteError)): ?>
+        <div class="alert alert-error" style="margin-bottom: 1.5rem;">
+          <?php echo htmlspecialchars($deleteError); ?>
         </div>
       <?php endif; ?>
 
