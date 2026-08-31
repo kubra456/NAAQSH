@@ -26,9 +26,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         $stmt = $pdo->prepare(
             'INSERT INTO inquiries (user_id, full_name, email, phone, subject, message, status)
-             VALUES (?, ?, ?, ?, ?, ?, "new")'
+             VALUES (?, ?, ?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$userId, $name, $email, $phone ?: null, $subject ?: 'Event Inquiry', $message]);
+        $stmt->execute([
+            $userId,
+            $name,
+            $email,
+            $phone ?: null,
+            $subject ?: 'Event Inquiry',
+            $message,
+            'new'
+        ]);
         $success = 'Thank you for reaching out. Your consultation request has been received. Our event directors will contact you within 24 hours.';
     }
 }

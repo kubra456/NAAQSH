@@ -225,9 +225,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     $tempHash = password_hash(bin2hex(random_bytes(8)), PASSWORD_DEFAULT);
                     $createUser = $pdo->prepare('
                         INSERT INTO users (full_name, email, phone, password_hash, status)
-                        VALUES (?, ?, ?, ?, "active")
+                        VALUES (?, ?, ?, ?, ?)
                     ');
-                    $createUser->execute([$customerName, $customerEmail, $customerPhone ?: null, $tempHash]);
+                    $createUser->execute([$customerName, $customerEmail, $customerPhone ?: null, $tempHash, 'active']);
                     $userId = (int)$pdo->lastInsertId();
                 }
 
@@ -249,7 +249,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             // Insert into `events` table
             $insertEvent = $pdo->prepare('
                 INSERT INTO events (user_id, title, event_type, event_date, venue, guest_count, budget, status, notes)
-                VALUES (?, ?, ?, ?, ?, ?, ?, "draft", ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ');
             $insertEvent->execute([
                 $userId,
@@ -259,6 +259,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 $venue !== '' ? $venue : null,
                 $guestCount,
                 $budget,
+                'draft',
                 $finalNotes
             ]);
             $eventId = (int)$pdo->lastInsertId();
@@ -274,7 +275,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 if (!empty($validServices)) {
                     $insertBooking = $pdo->prepare('
                         INSERT INTO bookings (user_id, event_id, service_id, quantity, total_price, status, notes)
-                        VALUES (?, ?, ?, 1, ?, "pending", ?)
+                        VALUES (?, ?, ?, 1, ?, ?, ?)
                     ');
                     foreach ($validServices as $vs) {
                         $insertBooking->execute([
@@ -282,6 +283,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                             $eventId,
                             (int)$vs['id'],
                             (float)$vs['price'],
+                            'pending',
                             'Selected in event planning consultation form'
                         ]);
                         $bookedServicesList[] = $vs['title'];
